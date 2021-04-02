@@ -22,7 +22,7 @@ var generateWordsCmd = &cobra.Command{
 		return nil
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
-		cor, _, err := corpus.Load("/Users/karlieverkest/Workspace/corpora/StarTrekTNG/corpus.json", wordPerson)
+		cor, _, err := corpus.Load(wordCorpus, wordPerson)
 		if err != nil {
 			return fmt.Errorf("error loading corpus: %w", err)
 		}

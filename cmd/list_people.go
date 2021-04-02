@@ -17,7 +17,7 @@ var listPeopleCmd = &cobra.Command{
 		return nil
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
-		_, people, err := corpus.Load("/Users/karlieverkest/Workspace/corpora/StarTrekTNG/corpus.json", "")
+		_, people, err := corpus.Load(listCorpus, "")
 		if err != nil {
 			return fmt.Errorf("error loading corpus: %w", err)
 		}
