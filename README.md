@@ -1,5 +1,11 @@
 # goetry
 
+_poetry generation in golang_
+
+The goal of this project is to generate standard poetic forms (like sonnets, haikus, limericks, etc.) based on a corpus.
+
+It will use a pronunciation dictionary (http://www.speech.cs.cmu.edu/cgi-bin/cmudict) achieve appropriate rhyming and metrical feet.
+
 ## Status
 
 No poetry - not yet!
