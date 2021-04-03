@@ -21,7 +21,7 @@ You'll need a basic corpus file in the following json format:
 ```
 [
   {Person: "Al", Line: "Why am I soft in the middle?"},
-  {Person: "Al", Line: "You can call me, Betty; and, Betty, when you call me you can call me \"Al.\""}
+  {Person: "Al", Line: "I can call you \"Betty;\" and, Betty, when you call me you can call me \"Al.\""}
 ]
 ```
 
