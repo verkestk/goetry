@@ -43,7 +43,7 @@ type Rhyme struct {
 // internal definition of Rhymer interface
 type rhymer struct {
 	rhymes  map[string][]*Rhyme
-	missing []string
+	missing map[string]bool
 }
 
 type byStrengthDesc []*Rhyme
@@ -84,7 +84,7 @@ func Load(pronunciationDictionaryFilepath string, corpus *corpus.Corpus) (Rhymer
 
 	// get all of the words from the corpus and save all of their pronunciations
 	// in a *rhymer
-	rhmr := &rhymer{rhymes: make(map[string][]*Rhyme)}
+	rhmr := &rhymer{rhymes: make(map[string][]*Rhyme), missing: make(map[string]bool)}
 	for _, line := range corpus.Lines {
 		// tokenize by all non letter/numbers (excluding apostrophes)
 		words := strings.FieldsFunc(line, func(c rune) bool {
@@ -99,6 +99,8 @@ func Load(pronunciationDictionaryFilepath string, corpus *corpus.Corpus) (Rhymer
 					for _, pronunciation := range prounciations {
 						rhymes = append(rhymes, &Rhyme{Word: strings.ToLower(word), Pronunciation: pronunciation})
 					}
+				} else {
+					rhmr.missing[strings.ToLower(word)] = true
 				}
 				rhmr.rhymes[strings.ToLower(word)] = rhymes
 			}
@@ -149,7 +151,11 @@ func (r *rhymer) Rhymes(word string, pronunciation []string, minStrength int) []
 // UnknownPronunciations returns all the words from the corpus that have no
 // known pronunciation.
 func (r *rhymer) UnknownPronunciations() []string {
-	return r.missing
+	missing := []string{}
+	for m := range r.missing {
+		missing = append(missing, m)
+	}
+	return missing
 }
 
 func getPronunciationFromDictionary(line string) (string, []string) {
