@@ -1,6 +1,8 @@
-// Adapted from https://golang.org/doc/codewalk/markov/
-
 /*
+Package markov builds markov chains and gneretes text.
+
+Adapted from https://golang.org/doc/codewalk/markov/
+
 Generating random text: a Markov chain algorithm
 
 Based on the program presented in the "Design and Implementation" chapter
@@ -86,8 +88,8 @@ func (c *Chain) Build(tokens []string) {
 	}
 }
 
-// Build reads text from the provided Reader and
-// parses it into prefixes and suffixes that are stored in Chain.
+// BuildFromLines reads text from a slice of strings, parses it into prefixes
+// and suffixes that are stored in Chain.
 func (c *Chain) BuildFromLines(lines []string) {
 	for _, line := range lines {
 		p := make(Prefix, c.prefixLen)
@@ -116,6 +118,9 @@ func (c *Chain) Generate(n int) string {
 	return strings.Join(words, " ")
 }
 
+// GenerateSentences generates _length_ sentences - defining a sentences by a
+// generated sequence ending in a ".". It's possible this function will never
+// complete if there are no tokens ending in "." in the corpus.
 func (c *Chain) GenerateSentences(length int) string {
 	sentences := []string{}
 
