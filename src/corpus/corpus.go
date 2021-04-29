@@ -36,12 +36,20 @@ func Load(filename string, person string) (*Corpus, []string, error) {
 		return nil, nil, fmt.Errorf("error loading corpus: %w", err)
 	}
 
+	if len(lines) == 0 {
+		return nil, nil, fmt.Errorf("corpus contains no lines")
+	}
+
 	lineStrs := []string{}
 	for _, line := range lines {
 		people[strings.ToLower(line.Person)] = true
 		if person == "" || strings.ToLower(person) == strings.ToLower(line.Person) {
 			lineStrs = append(lineStrs, line.Line)
 		}
+	}
+
+	if len(lineStrs) == 0 {
+		return nil, nil, fmt.Errorf("person %s not found in corpus", person)
 	}
 
 	peopleStrs := []string{}
