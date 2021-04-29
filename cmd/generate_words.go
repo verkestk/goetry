@@ -11,7 +11,6 @@ import (
 	"github.com/verkestk/goetry/src/markov"
 )
 
-var wordCorpus string
 var wordPerson string
 var wordLength int
 
@@ -22,7 +21,7 @@ var generateWordsCmd = &cobra.Command{
 		return nil
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
-		cor, _, err := corpus.Load(wordCorpus, wordPerson)
+		cor, _, err := corpus.Load(corpusFilepath, wordPerson)
 		if err != nil {
 			return fmt.Errorf("error loading corpus: %w", err)
 		}
@@ -37,7 +36,7 @@ var generateWordsCmd = &cobra.Command{
 }
 
 func init() {
-	generateWordsCmd.Flags().StringVarP(&wordCorpus, "corpus", "c", "", "path to the corpus file")
+	generateWordsCmd.Flags().StringVarP(&corpusFilepath, "corpus", "c", "", "path to the corpus file")
 	generateWordsCmd.Flags().StringVarP(&wordPerson, "person", "p", "", "person to base the generated text from")
 	generateWordsCmd.Flags().IntVarP(&wordLength, "length", "l", 10, "number of words to generate")
 	generateWordsCmd.MarkFlagRequired("corpus")

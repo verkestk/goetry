@@ -11,7 +11,6 @@ import (
 	"github.com/verkestk/goetry/src/markov"
 )
 
-var sentenceCorpus string
 var sentencePerson string
 var sentenceLength int
 
@@ -22,7 +21,7 @@ var generateSentencesCmd = &cobra.Command{
 		return nil
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
-		cor, _, err := corpus.Load(sentenceCorpus, sentencePerson)
+		cor, _, err := corpus.Load(corpusFilepath, sentencePerson)
 		if err != nil {
 			return fmt.Errorf("error loading corpus: %w", err)
 		}
@@ -37,7 +36,7 @@ var generateSentencesCmd = &cobra.Command{
 }
 
 func init() {
-	generateSentencesCmd.Flags().StringVarP(&sentenceCorpus, "corpus", "c", "", "path to the corpus file")
+	generateSentencesCmd.Flags().StringVarP(&corpusFilepath, "corpus", "c", "", "path to the corpus file")
 	generateSentencesCmd.Flags().StringVarP(&sentencePerson, "person", "p", "", "person to base the generated text from")
 	generateSentencesCmd.Flags().IntVarP(&sentenceLength, "length", "l", 1, "number of sentences to generate")
 	generateSentencesCmd.MarkFlagRequired("corpus")

@@ -8,8 +8,6 @@ import (
 	"github.com/verkestk/goetry/src/corpus"
 )
 
-var listCorpus string
-
 var listPeopleCmd = &cobra.Command{
 	Use:   "list-people",
 	Short: "generates a list of people available for the generate-text command",
@@ -17,7 +15,7 @@ var listPeopleCmd = &cobra.Command{
 		return nil
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
-		_, people, err := corpus.Load(listCorpus, "")
+		_, people, err := corpus.Load(corpusFilepath, "")
 		if err != nil {
 			return fmt.Errorf("error loading corpus: %w", err)
 		}
@@ -31,7 +29,7 @@ var listPeopleCmd = &cobra.Command{
 }
 
 func init() {
-	listPeopleCmd.Flags().StringVarP(&listCorpus, "corpus", "c", "", "path to the corpus file")
+	listPeopleCmd.Flags().StringVarP(&corpusFilepath, "corpus", "c", "", "path to the corpus file")
 	listPeopleCmd.MarkFlagRequired("corpus")
 	rootCmd.AddCommand(listPeopleCmd)
 }
