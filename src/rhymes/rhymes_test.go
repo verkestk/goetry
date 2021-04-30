@@ -2,11 +2,12 @@ package rhymes
 
 import (
 	"fmt"
-	"github.com/verkestk/goetry/src/corpus"
 	"reflect"
 	"sort"
 	"strings"
 	"testing"
+
+	"github.com/verkestk/goetry/src/corpus"
 )
 
 func Test_Load(t *testing.T) {

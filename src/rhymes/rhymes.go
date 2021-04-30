@@ -12,23 +12,6 @@ import (
 	"github.com/verkestk/goetry/src/corpus"
 )
 
-// Rhymer provides an interface for getting a word's pronunciation as well as
-// other rhyming words
-type Rhymer interface {
-	// Pronunciation provides the pronunciation of a word. Returns empty string for
-	// unknown words. A single word can have multiple pronunciations. Each
-	// pronunciation is represented by a string slice of phonemes.
-	Pronunciations(word string) [][]string
-
-	// Rhymes returns a list of Rhymes that match the word, ordered by strength of
-	// the rhyme (number of rhyming syllables).
-	Rhymes(word string, pronunciation []string, minStrength int) []*Rhyme
-
-	// UnknownPronunciations returns all the words from the corpus that have no
-	// known pronunciation.
-	UnknownPronunciations() []string
-}
-
 // Rhyme is a word plus it's pronunciation
 type Rhyme struct {
 	// the word itself, as originally appearing in the corpus
@@ -41,8 +24,9 @@ type Rhyme struct {
 	Strength int
 }
 
-// internal definition of Rhymer interface
-type rhymer struct {
+// Rhymer provides functions for getting pronunciations, finding rhyming words
+// from a corpus, and finding words in corpus missing pronunciation data.
+type Rhymer struct {
 	rhymes  map[string][]*Rhyme
 	missing map[string]bool
 }
@@ -64,7 +48,7 @@ func (s byStrengthDesc) Less(i, j int) bool {
 
 // Load creates a Rhymer based on a corpus, using a specific rhyming dictionary
 // It finds rhymes
-func Load(pronunciationDictionaryFilepath string, corpus *corpus.Corpus) (Rhymer, error) {
+func Load(pronunciationDictionaryFilepath string, corpus *corpus.Corpus) (*Rhymer, error) {
 	bytes, err := ioutil.ReadFile(pronunciationDictionaryFilepath)
 	if err != nil {
 		return nil, fmt.Errorf("error loading pronunciation dictionary: %w", err)
@@ -88,7 +72,7 @@ func Load(pronunciationDictionaryFilepath string, corpus *corpus.Corpus) (Rhymer
 
 	// get all of the words from the corpus and save all of their pronunciations
 	// in a *rhymer
-	rhmr := &rhymer{rhymes: make(map[string][]*Rhyme), missing: make(map[string]bool)}
+	rhmr := &Rhymer{rhymes: make(map[string][]*Rhyme), missing: make(map[string]bool)}
 	for _, line := range corpus.Lines {
 		// tokenize by all non letter/numbers (excluding apostrophes)
 		words := strings.FieldsFunc(line, func(c rune) bool {
@@ -114,10 +98,10 @@ func Load(pronunciationDictionaryFilepath string, corpus *corpus.Corpus) (Rhymer
 	return rhmr, nil
 }
 
-// Pronunciation provides the pronunciation of a word. Returns empty string for
+// Pronunciations provides the pronunciation of a word. Returns empty string for
 // unknown words. A single word can have multiple pronunciations. Each
 // pronunciation is represented by a string slice of phonemes.
-func (r *rhymer) Pronunciations(word string) [][]string {
+func (r *Rhymer) Pronunciations(word string) [][]string {
 	rhymes, ok := r.rhymes[strings.ToLower(word)]
 	if ok {
 		pronunciations := [][]string{}
@@ -133,7 +117,7 @@ func (r *rhymer) Pronunciations(word string) [][]string {
 
 // Rhymes returns a list of Rhymes that match the word, ordered by strength of
 // the rhyme (number of rhyming syllables).
-func (r *rhymer) Rhymes(word string, pronunciation []string, minStrength int) []*Rhyme {
+func (r *Rhymer) Rhymes(word string, pronunciation []string, minStrength int) []*Rhyme {
 	// TODO - efficiant algorithm for finding rhymes
 
 	actualRhymes := []*Rhyme{}
@@ -154,7 +138,7 @@ func (r *rhymer) Rhymes(word string, pronunciation []string, minStrength int) []
 
 // UnknownPronunciations returns all the words from the corpus that have no
 // known pronunciation.
-func (r *rhymer) UnknownPronunciations() []string {
+func (r *Rhymer) UnknownPronunciations() []string {
 	missing := []string{}
 	for m := range r.missing {
 		missing = append(missing, m)
