@@ -3,6 +3,7 @@ package rhymes
 import (
 	"fmt"
 	"io/ioutil"
+	"reflect"
 	"sort"
 	"strings"
 	"unicode"
@@ -55,6 +56,9 @@ func (s byStrengthDesc) Swap(i, j int) {
 	s[i], s[j] = s[j], s[i]
 }
 func (s byStrengthDesc) Less(i, j int) bool {
+	if s[i].Strength == s[j].Strength {
+		return s[i].Word < s[j].Word
+	}
 	return s[i].Strength > s[j].Strength
 }
 
@@ -114,7 +118,7 @@ func Load(pronunciationDictionaryFilepath string, corpus *corpus.Corpus) (Rhymer
 // unknown words. A single word can have multiple pronunciations. Each
 // pronunciation is represented by a string slice of phonemes.
 func (r *rhymer) Pronunciations(word string) [][]string {
-	rhymes, ok := r.rhymes[word]
+	rhymes, ok := r.rhymes[strings.ToLower(word)]
 	if ok {
 		pronunciations := [][]string{}
 		for _, rhyme := range rhymes {
@@ -155,13 +159,20 @@ func (r *rhymer) UnknownPronunciations() []string {
 	for m := range r.missing {
 		missing = append(missing, m)
 	}
+
+	sort.Strings(missing)
 	return missing
 }
 
 func getPronunciationFromDictionary(line string) (string, []string) {
 	pieces := strings.Split(line, " ")
+
+	if len(pieces) < 3 {
+		return "", nil
+	}
+
 	word := strings.ToLower(pieces[0])
-	pronunciation := pieces[1:]
+	pronunciation := pieces[2:]
 
 	leftParenIndex := strings.Index(word, "(")
 	if leftParenIndex > 0 {
@@ -172,7 +183,7 @@ func getPronunciationFromDictionary(line string) (string, []string) {
 }
 
 func rhymeStrength(word1, word2 string, pronunciation1, pronunciation2 []string) int {
-	if word1 == word2 || pronunciationsEqual(pronunciation1, pronunciation2) {
+	if strings.ToLower(word1) == strings.ToLower(word2) || reflect.DeepEqual(normalizeEmphasis(pronunciation1), normalizeEmphasis(pronunciation2)) {
 		return -1
 	}
 
@@ -197,22 +208,8 @@ func rhymeStrength(word1, word2 string, pronunciation1, pronunciation2 []string)
 	return strength
 }
 
-func pronunciationsEqual(pronunciation1, pronunciation2 []string) bool {
-	if len(pronunciation1) != len(pronunciation2) {
-		return false
-	}
-
-	for i := range pronunciation1 {
-		if pronunciation1[i] != pronunciation2[1] {
-			return false
-		}
-	}
-
-	return true
-}
-
 func getRhymeSyllables(pronunciation []string) []string {
-	// list := C C V V C C V C => CC VV CC V C => VVCC VC
+	// list := C C V V C C V C => V VCC VC
 
 	firstVowel := indexFirstVowel(pronunciation)
 	if firstVowel == -1 {
@@ -220,31 +217,20 @@ func getRhymeSyllables(pronunciation []string) []string {
 	}
 
 	// chunk them by phoneme type (consonants/vowels)
-	chunks := []string{}
-	currentChunk := ""
-	currentChunkIsVowel := true
+	syllables := []string{}
+	currentSyllable := ""
 	for i := firstVowel; i < len(pronunciation); i++ {
-		if isVowelPhoneme(pronunciation[i]) == currentChunkIsVowel {
-			currentChunk += strings.Replace(pronunciation[i], "2", "1", 1)
+		if (len(syllables) == 0 && len(currentSyllable) == 0) || !isVowelPhoneme(pronunciation[i]) {
+			// if this is the first vowel, or any consonant, append to current syllable
+			currentSyllable += pronunciation[i]
 		} else {
-			chunks = append(chunks, currentChunk)
-			currentChunk = strings.Replace(pronunciation[i], "2", "1", 1)
-			currentChunkIsVowel = isVowelPhoneme(pronunciation[i])
+			syllables = append(syllables, currentSyllable)
+			currentSyllable = pronunciation[i]
 		}
 	}
-	chunks = append(chunks, currentChunk)
+	syllables = append(syllables, currentSyllable)
 
-	// add an empty chunk in case the word ends in a vowel phoneme
-	if len(chunks)%2 == 1 {
-		chunks = append(chunks, "")
-	}
-
-	syllables := []string{}
-	for i := 0; i < len(chunks); i += 2 {
-		syllables = append(syllables, chunks[i]+chunks[i+1])
-	}
-
-	return syllables
+	return normalizeEmphasis(syllables)
 }
 
 func indexFirstVowel(pronunciation []string) int {
@@ -260,4 +246,13 @@ func indexFirstVowel(pronunciation []string) int {
 func isVowelPhoneme(phoneme string) bool {
 	lastRune, _ := utf8.DecodeLastRuneInString(phoneme)
 	return unicode.IsNumber(lastRune)
+}
+
+func normalizeEmphasis(syllablesOrPhonemes []string) []string {
+	normalized := []string{}
+	for _, str := range syllablesOrPhonemes {
+		normalized = append(normalized, strings.ReplaceAll(str, "2", "1"))
+	}
+
+	return normalized
 }
