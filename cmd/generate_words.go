@@ -3,12 +3,15 @@ package cmd
 import (
 	"fmt"
 	"math/rand"
+	"strings"
 	"time"
 
 	"github.com/spf13/cobra"
 
+	"github.com/verkestk/markovokram"
+
 	"github.com/verkestk/goetry/src/corpus"
-	"github.com/verkestk/goetry/src/markov"
+	"github.com/verkestk/goetry/src/util/markov"
 )
 
 var wordPerson string
@@ -27,9 +30,11 @@ var generateWordsCmd = &cobra.Command{
 		}
 
 		rand.Seed(time.Now().UnixNano())
-		chain := markov.NewChain(2)
-		chain.BuildFromLines(cor.Lines)
-		text := chain.Generate(wordLength)
+		chain := markovokram.NewChain(2)
+		for _, line := range cor.Lines {
+			chain.Build(strings.Fields(line))
+		}
+		text := markov.GenerateWords(chain, wordLength)
 		fmt.Println(text)
 		return nil
 	},
