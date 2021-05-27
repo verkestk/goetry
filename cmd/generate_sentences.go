@@ -30,7 +30,7 @@ var generateSentencesCmd = &cobra.Command{
 		}
 
 		rand.Seed(time.Now().UnixNano())
-		chain := markovokram.NewChain(2)
+		chain := markovokram.NewChain(prefixLength)
 		for _, line := range cor.Lines {
 			chain.Build(strings.Fields(line))
 		}
@@ -44,6 +44,7 @@ func init() {
 	generateSentencesCmd.Flags().StringVarP(&corpusFilepath, "corpus", "c", "", "path to the corpus file")
 	generateSentencesCmd.Flags().StringVarP(&sentencePerson, "person", "p", "", "person to base the generated text from")
 	generateSentencesCmd.Flags().IntVarP(&sentenceLength, "length", "l", 1, "number of sentences to generate")
+	generateSentencesCmd.Flags().IntVarP(&prefixLength, "prefix-length", "", 2, "length of markov chain prefix")
 	generateSentencesCmd.MarkFlagRequired("corpus")
 	rootCmd.AddCommand(generateSentencesCmd)
 }

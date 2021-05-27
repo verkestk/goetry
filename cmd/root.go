@@ -18,6 +18,7 @@ var rootCmd = &cobra.Command{
 
 var corpusFilepath string
 var pronunciationDictionaryFilepath string
+var prefixLength int
 
 // Execute executes a CLI command - boilerplate for cobra
 func Execute() {

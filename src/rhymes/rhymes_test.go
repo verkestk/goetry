@@ -1,7 +1,6 @@
 package rhymes
 
 import (
-	"fmt"
 	"reflect"
 	"sort"
 	"strings"
@@ -45,8 +44,8 @@ func Test_rhymer_Pronunciations(t *testing.T) {
 		t.Errorf("Expected %d pronuncations for \"%s\", got %d", len(expectedPronunciations), word, len(pronunciations))
 	}
 	if !reflect.DeepEqual(pronunciations, expectedPronunciations) {
-		fmt.Println("expected:", expectedPronunciations)
-		fmt.Println("actual:", pronunciations)
+		t.Logf("expected: %v\n", expectedPronunciations)
+		t.Logf("actual: %v\n", pronunciations)
 		t.Errorf("Unexpected pronuncations for \"%s\"", word)
 	}
 
@@ -57,8 +56,8 @@ func Test_rhymer_Pronunciations(t *testing.T) {
 		t.Errorf("Expected %d pronuncations for \"%s\", got %d", len(expectedPronunciations), word, len(pronunciations))
 	}
 	if !reflect.DeepEqual(pronunciations, expectedPronunciations) {
-		fmt.Println("expected:", expectedPronunciations)
-		fmt.Println("actual:", pronunciations)
+		t.Logf("expected: %v\n", expectedPronunciations)
+		t.Logf("actual: %v\n", pronunciations)
 		t.Errorf("Unexpected pronuncations for \"%s\"", word)
 	}
 
@@ -209,8 +208,8 @@ func Test_rhymer_Rhymes(t *testing.T) {
 	for word, expectedRhymeGroups := range wordsStrength1 {
 		pronunciations := rhmr.Pronunciations(word)
 		if len(expectedRhymeGroups) != len(pronunciations) {
-			fmt.Println("expected:", expectedRhymeGroups)
-			fmt.Println("actual:", pronunciations)
+			t.Logf("expected: %v\n", expectedRhymeGroups)
+			t.Logf("actual: %v\n", pronunciations)
 			t.Fatalf("Expected %d pronunciations for \"%s\", got %d", len(expectedRhymeGroups), word, len(pronunciations))
 		}
 		for indexP, pronunciation := range pronunciations {
@@ -220,8 +219,8 @@ func Test_rhymer_Rhymes(t *testing.T) {
 				for _, rhyme := range rhymes {
 					actual = append(actual, rhyme.Word)
 				}
-				fmt.Println("expected:", expectedRhymeGroups[indexP])
-				fmt.Println("actual:", actual)
+				t.Logf("expected: %v\n", expectedRhymeGroups[indexP])
+				t.Logf("actual: %v\n", actual)
 				t.Fatalf("Expected %d rhymes for \"%s\" (%s), got %d", len(expectedRhymeGroups[indexP]), word, strings.Join(pronunciation, " "), len(rhymes))
 			}
 
@@ -239,8 +238,8 @@ func Test_rhymer_Rhymes(t *testing.T) {
 	for word, expectedRhymeGroups := range wordsStrength2 {
 		pronunciations := rhmr.Pronunciations(word)
 		if len(expectedRhymeGroups) != len(pronunciations) {
-			fmt.Println("expected:", expectedRhymeGroups)
-			fmt.Println("actual:", pronunciations)
+			t.Logf("expected: %v\n", expectedRhymeGroups)
+			t.Logf("actual: %v\n", pronunciations)
 			t.Fatalf("Expected %d pronunciations for \"%s\", got %d", len(expectedRhymeGroups), word, len(pronunciations))
 		}
 		for indexP, pronunciation := range pronunciations {
@@ -250,8 +249,8 @@ func Test_rhymer_Rhymes(t *testing.T) {
 				for _, rhyme := range rhymes {
 					actual = append(actual, rhyme.Word)
 				}
-				fmt.Println("expected:", expectedRhymeGroups[indexP])
-				fmt.Println("actual:", actual)
+				t.Logf("expected: %v\n", expectedRhymeGroups[indexP])
+				t.Logf("actual: %v\n", actual)
 				t.Fatalf("Expected %d rhymes for \"%s\" (%s), got %d", len(expectedRhymeGroups[indexP]), word, strings.Join(pronunciation, " "), len(rhymes))
 			}
 
@@ -317,8 +316,8 @@ func Test_getPronunciationFromDictionary(t *testing.T) {
 		t.Errorf("expected word \"%s\", got \"%s\"", expectedWord, word)
 	}
 	if !reflect.DeepEqual(expectedPhonemes, phonemes) {
-		fmt.Println("expected", expectedPhonemes)
-		fmt.Println("actual", phonemes)
+		t.Logf("expected: %v\n", expectedPhonemes)
+		t.Logf("actual: %v\n", phonemes)
 		t.Errorf("unexpected phonemes")
 	}
 
@@ -330,8 +329,8 @@ func Test_getPronunciationFromDictionary(t *testing.T) {
 		t.Errorf("expected word \"%s\", got \"%s\"", expectedWord, word)
 	}
 	if !reflect.DeepEqual(expectedPhonemes, phonemes) {
-		fmt.Println("expected", expectedPhonemes)
-		fmt.Println("actual", phonemes)
+		t.Logf("expected: %v\n", expectedPhonemes)
+		t.Logf("actual: %v\n", phonemes)
 		t.Errorf("unexpected phonemes")
 	}
 
@@ -341,8 +340,8 @@ func Test_getPronunciationFromDictionary(t *testing.T) {
 		t.Errorf("expected empty word, got \"%s\"", word)
 	}
 	if len(phonemes) > 0 {
-		fmt.Println("expected", []string{})
-		fmt.Println("actual", phonemes)
+		t.Logf("expected: %v\n", []string{})
+		t.Logf("actual: %v\n", phonemes)
 		t.Errorf("unexpected phonemes")
 	}
 }
@@ -465,9 +464,9 @@ func Test_getRhymeSyllables(t *testing.T) {
 	expectedSyllables := []string{"A0"}
 	syllables := getRhymeSyllables(phonemes)
 	if !reflect.DeepEqual(expectedSyllables, syllables) {
-		fmt.Println("phonemes:", phonemes)
-		fmt.Println("expected:", expectedSyllables)
-		fmt.Println("actual:", syllables)
+		t.Logf("phonemes: %v\n", phonemes)
+		t.Logf("expected: %v\n", expectedSyllables)
+		t.Logf("actual: %v\n", syllables)
 		t.Errorf("unexpected syllables")
 	}
 
@@ -475,9 +474,9 @@ func Test_getRhymeSyllables(t *testing.T) {
 	expectedSyllables = []string{"A0B"}
 	syllables = getRhymeSyllables(phonemes)
 	if !reflect.DeepEqual(expectedSyllables, syllables) {
-		fmt.Println("phonemes:", phonemes)
-		fmt.Println("expected:", expectedSyllables)
-		fmt.Println("actual:", syllables)
+		t.Logf("phonemes: %v\n", phonemes)
+		t.Logf("expected: %v\n", expectedSyllables)
+		t.Logf("actual: %v\n", syllables)
 		t.Errorf("unexpected syllables")
 	}
 
@@ -485,9 +484,9 @@ func Test_getRhymeSyllables(t *testing.T) {
 	expectedSyllables = []string{"A0"}
 	syllables = getRhymeSyllables(phonemes)
 	if !reflect.DeepEqual(expectedSyllables, syllables) {
-		fmt.Println("phonemes:", phonemes)
-		fmt.Println("expected:", expectedSyllables)
-		fmt.Println("actual:", syllables)
+		t.Logf("phonemes: %v\n", phonemes)
+		t.Logf("expected: %v\n", expectedSyllables)
+		t.Logf("actual: %v\n", syllables)
 		t.Errorf("unexpected syllables")
 	}
 
@@ -495,9 +494,9 @@ func Test_getRhymeSyllables(t *testing.T) {
 	expectedSyllables = []string{"A0B"}
 	syllables = getRhymeSyllables(phonemes)
 	if !reflect.DeepEqual(expectedSyllables, syllables) {
-		fmt.Println("phonemes:", phonemes)
-		fmt.Println("expected:", expectedSyllables)
-		fmt.Println("actual:", syllables)
+		t.Logf("phonemes: %v\n", phonemes)
+		t.Logf("expected: %v\n", expectedSyllables)
+		t.Logf("actual: %v\n", syllables)
 		t.Errorf("unexpected syllables")
 	}
 
@@ -505,9 +504,9 @@ func Test_getRhymeSyllables(t *testing.T) {
 	expectedSyllables = []string{"A0B", "A0"}
 	syllables = getRhymeSyllables(phonemes)
 	if !reflect.DeepEqual(expectedSyllables, syllables) {
-		fmt.Println("phonemes:", phonemes)
-		fmt.Println("expected:", expectedSyllables)
-		fmt.Println("actual:", syllables)
+		t.Logf("phonemes: %v\n", phonemes)
+		t.Logf("expected: %v\n", expectedSyllables)
+		t.Logf("actual: %v\n", syllables)
 		t.Errorf("unexpected syllables")
 	}
 
@@ -515,9 +514,9 @@ func Test_getRhymeSyllables(t *testing.T) {
 	expectedSyllables = []string{"A0B", "A0B"}
 	syllables = getRhymeSyllables(phonemes)
 	if !reflect.DeepEqual(expectedSyllables, syllables) {
-		fmt.Println("phonemes:", phonemes)
-		fmt.Println("expected:", expectedSyllables)
-		fmt.Println("actual:", syllables)
+		t.Logf("phonemes: %v\n", phonemes)
+		t.Logf("expected: %v\n", expectedSyllables)
+		t.Logf("actual: %v\n", syllables)
 		t.Errorf("unexpected syllables")
 	}
 
@@ -525,9 +524,9 @@ func Test_getRhymeSyllables(t *testing.T) {
 	expectedSyllables = []string{"A0B", "A0"}
 	syllables = getRhymeSyllables(phonemes)
 	if !reflect.DeepEqual(expectedSyllables, syllables) {
-		fmt.Println("phonemes:", phonemes)
-		fmt.Println("expected:", expectedSyllables)
-		fmt.Println("actual:", syllables)
+		t.Logf("phonemes: %v\n", phonemes)
+		t.Logf("expected: %v\n", expectedSyllables)
+		t.Logf("actual: %v\n", syllables)
 		t.Errorf("unexpected syllables")
 	}
 
@@ -535,9 +534,9 @@ func Test_getRhymeSyllables(t *testing.T) {
 	expectedSyllables = []string{"A0B", "A0B"}
 	syllables = getRhymeSyllables(phonemes)
 	if !reflect.DeepEqual(expectedSyllables, syllables) {
-		fmt.Println("phonemes:", phonemes)
-		fmt.Println("expected:", expectedSyllables)
-		fmt.Println("actual:", syllables)
+		t.Logf("phonemes: %v\n", phonemes)
+		t.Logf("expected: %v\n", expectedSyllables)
+		t.Logf("actual: %v\n", syllables)
 		t.Errorf("unexpected syllables")
 	}
 
@@ -545,9 +544,9 @@ func Test_getRhymeSyllables(t *testing.T) {
 	expectedSyllables = []string{"A0", "A0"}
 	syllables = getRhymeSyllables(phonemes)
 	if !reflect.DeepEqual(expectedSyllables, syllables) {
-		fmt.Println("phonemes:", phonemes)
-		fmt.Println("expected:", expectedSyllables)
-		fmt.Println("actual:", syllables)
+		t.Logf("phonemes: %v\n", phonemes)
+		t.Logf("expected: %v\n", expectedSyllables)
+		t.Logf("actual: %v\n", syllables)
 		t.Errorf("unexpected syllables")
 	}
 
@@ -555,9 +554,9 @@ func Test_getRhymeSyllables(t *testing.T) {
 	expectedSyllables = []string{"A0", "A0BB"}
 	syllables = getRhymeSyllables(phonemes)
 	if !reflect.DeepEqual(expectedSyllables, syllables) {
-		fmt.Println("phonemes:", phonemes)
-		fmt.Println("expected:", expectedSyllables)
-		fmt.Println("actual:", syllables)
+		t.Logf("phonemes: %v\n", phonemes)
+		t.Logf("expected: %v\n", expectedSyllables)
+		t.Logf("actual: %v\n", syllables)
 		t.Errorf("unexpected syllables")
 	}
 
@@ -565,9 +564,9 @@ func Test_getRhymeSyllables(t *testing.T) {
 	expectedSyllables = []string{"A0", "A0BB", "A0", "A0"}
 	syllables = getRhymeSyllables(phonemes)
 	if !reflect.DeepEqual(expectedSyllables, syllables) {
-		fmt.Println("phonemes:", phonemes)
-		fmt.Println("expected:", expectedSyllables)
-		fmt.Println("actual:", syllables)
+		t.Logf("phonemes: %v\n", phonemes)
+		t.Logf("expected: %v\n", expectedSyllables)
+		t.Logf("actual: %v\n", syllables)
 		t.Errorf("unexpected syllables")
 	}
 
@@ -575,9 +574,9 @@ func Test_getRhymeSyllables(t *testing.T) {
 	expectedSyllables = []string{"A0", "A0BB", "A0", "A0BB"}
 	syllables = getRhymeSyllables(phonemes)
 	if !reflect.DeepEqual(expectedSyllables, syllables) {
-		fmt.Println("phonemes:", phonemes)
-		fmt.Println("expected:", expectedSyllables)
-		fmt.Println("actual:", syllables)
+		t.Logf("phonemes: %v\n", phonemes)
+		t.Logf("expected: %v\n", expectedSyllables)
+		t.Logf("actual: %v\n", syllables)
 		t.Errorf("unexpected syllables")
 	}
 
@@ -585,9 +584,9 @@ func Test_getRhymeSyllables(t *testing.T) {
 	expectedSyllables = []string{"A0", "A1", "A1"}
 	syllables = getRhymeSyllables(phonemes)
 	if !reflect.DeepEqual(expectedSyllables, syllables) {
-		fmt.Println("phonemes:", phonemes)
-		fmt.Println("expected:", expectedSyllables)
-		fmt.Println("actual:", syllables)
+		t.Logf("phonemes: %v\n", phonemes)
+		t.Logf("expected: %v\n", expectedSyllables)
+		t.Logf("actual: %v\n", syllables)
 		t.Errorf("unexpected syllables")
 	}
 
@@ -595,9 +594,9 @@ func Test_getRhymeSyllables(t *testing.T) {
 	expectedSyllables = []string{"UW1P", "ER0K", "AE1L", "AH0FR", "AE1JH", "AH0L", "IH1ST", "IH0K", "EH1KSP", "IY0", "AE1L", "AH0D", "OW1SH", "AH0S"}
 	syllables = getRhymeSyllables(phonemes)
 	if !reflect.DeepEqual(expectedSyllables, syllables) {
-		fmt.Println("phonemes:", phonemes)
-		fmt.Println("expected:", expectedSyllables)
-		fmt.Println("actual:", syllables)
+		t.Logf("phonemes: %v\n", phonemes)
+		t.Logf("expected: %v\n", expectedSyllables)
+		t.Logf("actual: %v\n", syllables)
 		t.Errorf("unexpected syllables")
 	}
 }
@@ -607,7 +606,7 @@ func Test_indexFirstVowel(t *testing.T) {
 	expectedIndex := 0
 	index := indexFirstVowel(phonemes)
 	if expectedIndex != index {
-		fmt.Println("phonemes:", phonemes)
+		t.Logf("phonemes: %v\n", phonemes)
 		t.Errorf("expected %d first vowel index, got %d", expectedIndex, index)
 	}
 
@@ -615,7 +614,7 @@ func Test_indexFirstVowel(t *testing.T) {
 	expectedIndex = 1
 	index = indexFirstVowel(phonemes)
 	if expectedIndex != index {
-		fmt.Println("phonemes:", phonemes)
+		t.Logf("phonemes: %v\n", phonemes)
 		t.Errorf("expected %d first vowel index, got %d", expectedIndex, index)
 	}
 
@@ -623,7 +622,7 @@ func Test_indexFirstVowel(t *testing.T) {
 	expectedIndex = 2
 	index = indexFirstVowel(phonemes)
 	if expectedIndex != index {
-		fmt.Println("phonemes:", phonemes)
+		t.Logf("phonemes: %v\n", phonemes)
 		t.Errorf("expected %d first vowel index, got %d", expectedIndex, index)
 	}
 
@@ -631,7 +630,7 @@ func Test_indexFirstVowel(t *testing.T) {
 	expectedIndex = 3
 	index = indexFirstVowel(phonemes)
 	if expectedIndex != index {
-		fmt.Println("phonemes:", phonemes)
+		t.Logf("phonemes: %v\n", phonemes)
 		t.Errorf("expected %d first vowel index, got %d", expectedIndex, index)
 	}
 
@@ -639,7 +638,7 @@ func Test_indexFirstVowel(t *testing.T) {
 	expectedIndex = 0
 	index = indexFirstVowel(phonemes)
 	if expectedIndex != index {
-		fmt.Println("phonemes:", phonemes)
+		t.Logf("phonemes: %v\n", phonemes)
 		t.Errorf("expected %d first vowel index, got %d", expectedIndex, index)
 	}
 }
@@ -672,9 +671,9 @@ func Test_normalizeEmphasis(t *testing.T) {
 	expectedNormalized := []string{"S", "UW1", "P", "ER0", "K", "AE1", "L", "AH0", "F", "R", "AE1", "JH", "AH0", "L", "IH1", "S", "T", "IH0", "K", "EH1", "K", "S", "P", "IY0", "AE1", "L", "AH0", "D", "OW1", "SH", "AH0", "S"}
 	normalized := normalizeEmphasis(phonemes)
 	if !reflect.DeepEqual(expectedNormalized, normalized) {
-		fmt.Println("phonemes:", phonemes)
-		fmt.Println("expected:", expectedNormalized)
-		fmt.Println("actual:", normalized)
+		t.Logf("phonemes: %v\n", phonemes)
+		t.Logf("expected: %v\n", expectedNormalized)
+		t.Logf("actual: %v\n", normalized)
 		t.Errorf("unexpected emphasis")
 	}
 
@@ -682,9 +681,9 @@ func Test_normalizeEmphasis(t *testing.T) {
 	expectedNormalized = []string{"UW1P", "ER0K", "AE1L", "AH0FR", "AE1JH", "AH0L", "IH1ST", "IH0K", "EH1KSP", "IY0", "AE1L", "AH0D", "OW1SH", "AH0S"}
 	normalized = normalizeEmphasis(syllables)
 	if !reflect.DeepEqual(expectedNormalized, normalized) {
-		fmt.Println("syllables:", syllables)
-		fmt.Println("expected:", expectedNormalized)
-		fmt.Println("actual:", normalized)
+		t.Logf("phonemes: %v\n", phonemes)
+		t.Logf("expected: %v\n", expectedNormalized)
+		t.Logf("actual: %v\n", normalized)
 		t.Errorf("unexpected emphasis")
 	}
 }
@@ -707,8 +706,8 @@ func Test_byStrengthDesc(t *testing.T) {
 		for _, rhyme := range rhymes {
 			actualOrder = append(actualOrder, rhyme.Word)
 		}
-		fmt.Println("excpted:", expectedOrder)
-		fmt.Println("actual:", actualOrder)
+		t.Logf("expected: %v\n", expectedOrder)
+		t.Logf("actual: %v\n", actualOrder)
 		t.Errorf("unexpected ordering")
 	}
 }
