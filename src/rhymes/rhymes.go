@@ -82,9 +82,9 @@ func Load(pronunciationDictionaryFilepath string, corpus *corpus.Corpus) (*Rhyme
 			_, ok := rhmr.rhymes[strings.ToLower(word)]
 			if !ok {
 				rhymes := []*Rhyme{}
-				prounciations, ok := pronunciationMap[strings.ToLower(word)]
+				pronunciations, ok := pronunciationMap[strings.ToLower(word)]
 				if ok {
-					for _, pronunciation := range prounciations {
+					for _, pronunciation := range pronunciations {
 						rhymes = append(rhymes, &Rhyme{Word: strings.ToLower(word), Pronunciation: pronunciation})
 					}
 				} else {

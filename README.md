@@ -45,3 +45,23 @@ You can run the `generate-words` command to generate _n_ number of words.
 Required: The corpus file
 Optional: Specific person (if unspecified, uses all the text in the corpus)
 Optional: Number of words (default 10)
+
+#### List People
+You can run the `list-people` command to get the list of people from your corpus. Helpful if you, like me, have used the scripts of all Star Trek TNG episodes, meaning many, many options with hard-to-remember spellings.
+
+Required: The corpus file
+
+#### Get Rhymes
+You can run the `get-rhymes` command to get all of the words from your corpus that rhyme with an input word.
+
+Required: The corpus file
+Required: The pronunciation dictionary file
+Required: The word to rhyme
+Optional: The minimum rhyme strength (roughly number of syllables that rhyme)
+Optional: The number of rhymes to return (default to 20, highest strength rhymes first)
+
+#### find-missing-pronunciation
+You can run the `find-missing-pronunciation` command to get all words from the corpus that are missing from the pronunciation dictionary.
+
+Required: The corpus file
+Required: The pronunciation dictionary file

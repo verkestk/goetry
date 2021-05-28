@@ -34,52 +34,52 @@ func Test_rhymer_Pronunciations(t *testing.T) {
 	word := "beerbelly"
 	pronunciations := rhmr.Pronunciations(word)
 	if len(pronunciations) != 0 {
-		t.Errorf("Expected 0 pronuncations for \"%s\", got %d", word, len(pronunciations))
+		t.Errorf("Expected 0 pronunciations for \"%s\", got %d", word, len(pronunciations))
 	}
 
 	word = "accidents"
 	expectedPronunciations := [][]string{[]string{"AE1", "K", "S", "AH0", "D", "AH0", "N", "T", "S"}}
 	pronunciations = rhmr.Pronunciations(word)
 	if len(pronunciations) != len(expectedPronunciations) {
-		t.Errorf("Expected %d pronuncations for \"%s\", got %d", len(expectedPronunciations), word, len(pronunciations))
+		t.Errorf("Expected %d pronunciations for \"%s\", got %d", len(expectedPronunciations), word, len(pronunciations))
 	}
 	if !reflect.DeepEqual(pronunciations, expectedPronunciations) {
 		t.Logf("expected: %v\n", expectedPronunciations)
 		t.Logf("actual: %v\n", pronunciations)
-		t.Errorf("Unexpected pronuncations for \"%s\"", word)
+		t.Errorf("Unexpected pronunciations for \"%s\"", word)
 	}
 
 	word = "ACCIDENTS"
 	expectedPronunciations = [][]string{[]string{"AE1", "K", "S", "AH0", "D", "AH0", "N", "T", "S"}}
 	pronunciations = rhmr.Pronunciations(word)
 	if len(pronunciations) != len(expectedPronunciations) {
-		t.Errorf("Expected %d pronuncations for \"%s\", got %d", len(expectedPronunciations), word, len(pronunciations))
+		t.Errorf("Expected %d pronunciations for \"%s\", got %d", len(expectedPronunciations), word, len(pronunciations))
 	}
 	if !reflect.DeepEqual(pronunciations, expectedPronunciations) {
 		t.Logf("expected: %v\n", expectedPronunciations)
 		t.Logf("actual: %v\n", pronunciations)
-		t.Errorf("Unexpected pronuncations for \"%s\"", word)
+		t.Errorf("Unexpected pronunciations for \"%s\"", word)
 	}
 
 	word = "am"
 	expectedPronunciations = [][]string{[]string{"AM", "AE1", "M"}, []string{"EY1", "EH1", "M"}}
 	pronunciations = rhmr.Pronunciations(word)
 	if len(pronunciations) != len(expectedPronunciations) {
-		t.Errorf("Expected %d pronuncations for \"%s\", got %d", len(expectedPronunciations), word, len(pronunciations))
+		t.Errorf("Expected %d pronunciations for \"%s\", got %d", len(expectedPronunciations), word, len(pronunciations))
 	}
 
 	word = "the"
 	expectedPronunciations = [][]string{[]string{"DH", "AH0"}, []string{"DH", "AH1"}, []string{"DH", "IY0"}}
 	pronunciations = rhmr.Pronunciations(word)
 	if len(pronunciations) != len(expectedPronunciations) {
-		t.Errorf("Expected %d pronuncations for \"%s\", got %d", len(expectedPronunciations), word, len(pronunciations))
+		t.Errorf("Expected %d pronunciations for \"%s\", got %d", len(expectedPronunciations), word, len(pronunciations))
 	}
 
 	word = "when"
 	expectedPronunciations = [][]string{[]string{"W", "EH1", "N"}, []string{"HH", "W", "EH1", "N"}, []string{"W", "IH1", "N"}, []string{"HH", "W", "IH1", "N"}}
 	pronunciations = rhmr.Pronunciations(word)
 	if len(pronunciations) != len(expectedPronunciations) {
-		t.Errorf("Expected %d pronuncations for \"%s\", got %d", len(expectedPronunciations), word, len(pronunciations))
+		t.Errorf("Expected %d pronunciations for \"%s\", got %d", len(expectedPronunciations), word, len(pronunciations))
 	}
 }
 
